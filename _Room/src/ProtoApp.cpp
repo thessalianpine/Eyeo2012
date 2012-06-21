@@ -71,7 +71,7 @@ class ProtoApp : public AppBasic {
 void ProtoApp::prepareSettings( Settings *settings )
 {
 	settings->setWindowSize( APP_WIDTH, APP_HEIGHT );
-	//settings->setBorderless( true );
+	settings->setBorderless( false );
 }
 
 void ProtoApp::setup()
