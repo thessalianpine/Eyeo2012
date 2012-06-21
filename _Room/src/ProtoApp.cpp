@@ -71,7 +71,7 @@ class ProtoApp : public AppBasic {
 void ProtoApp::prepareSettings( Settings *settings )
 {
 	settings->setWindowSize( APP_WIDTH, APP_HEIGHT );
-	settings->setBorderless( true );
+	//settings->setBorderless( true );
 }
 
 void ProtoApp::setup()
@@ -81,7 +81,8 @@ void ProtoApp::setup()
 	
 	// LOAD SHADERS
 	try {
-		mRoomShader	= gl::GlslProg( loadResource( "room.vert" ), loadResource( "room.frag" ) );
+		//mRoomShader	= gl::GlslProg( loadResource( "room.vert" ), loadResource( "room.frag" ) );
+		mRoomShader	= gl::GlslProg( loadResource( RES_ROOM_VERT ), loadResource( RES_ROOM_FRAG ) );
 	} catch( gl::GlslProgCompileExc e ) {
 		std::cout << e.what() << std::endl;
 		quit();
@@ -94,7 +95,9 @@ void ProtoApp::setup()
     mipFmt.setMagFilter( GL_LINEAR );
 	
 	// LOAD TEXTURES
-	mIconTex			= gl::Texture( loadImage( loadResource( "iconRoom.png" ) ), mipFmt );
+	//mIconTex			= gl::Texture( loadImage( loadResource( "iconRoom.png" ) ), mipFmt );
+	mIconTex			= gl::Texture( loadImage( loadResource( RES_ICONROOM_PNG ) ), mipFmt );
+
 	
 	// ROOM
 	gl::Fbo::Format roomFormat;
@@ -242,9 +245,9 @@ void ProtoApp::draw()
 	
 	// SAVE FRAMES
 	if( mSaveFrames && mNumSavedFrames < 5000 ){
-		writeImage( getHomeDirectory() + "Room/" + toString( mNumSavedFrames ) + ".png", copyWindowSurface() );
+		writeImage( *getHomeDirectory().c_str() + "Room/" + toString( mNumSavedFrames ) + ".png", copyWindowSurface() );
 		mNumSavedFrames ++;
-	}
+	}	
 
 	// DRAW PARAMS WINDOW
 //	if( mShowParams ){
