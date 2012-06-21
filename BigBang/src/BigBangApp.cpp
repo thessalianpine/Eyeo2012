@@ -67,7 +67,7 @@ class BigBangApp : public AppBasic {
 void BigBangApp::prepareSettings( Settings *settings )
 {
 	settings->setWindowSize( APP_WIDTH, APP_HEIGHT );
-	settings->setBorderless( true );
+	settings->setBorderless( false );
 }
 
 void BigBangApp::setup()
@@ -77,9 +77,9 @@ void BigBangApp::setup()
 	
 	// LOAD SHADERS
 	try {
-		mRoomShader		= gl::GlslProg( loadResource( "room.vert" ), loadResource( "room.frag" ) );
-		mBalloonsShader = gl::GlslProg( loadResource( "balloons.vert" ), loadResource( "balloons.frag" ) );
-		mConfettiShader	= gl::GlslProg( loadResource( "confetti.vert" ), loadResource( "confetti.frag" ) );
+		mRoomShader		= gl::GlslProg( loadResource( RES_ROOM_VERT ), loadResource( RES_ROOM_FRAG ) );
+		mBalloonsShader = gl::GlslProg( loadResource( RES_BALLOONS_VERT ), loadResource( RES_BALLOONS_FRAG ) );
+		mConfettiShader	= gl::GlslProg( loadResource( RES_CONFETTI_VERT ), loadResource( RES_CONFETTI_FRAG ) );
 	} catch( gl::GlslProgCompileExc e ) {
 		std::cout << e.what() << std::endl;
 		quit();
@@ -92,7 +92,7 @@ void BigBangApp::setup()
     mipFmt.setMagFilter( GL_LINEAR );
 	
 	// LOAD TEXTURES
-	mIconTex		= gl::Texture( loadImage( loadResource( "iconBigBang.png" ) ) );
+	mIconTex		= gl::Texture( loadImage( loadResource( RES_ICONBIGBANG_PNG ) ) );
 	mCubeMap		= CubeMap( GLsizei(512), GLsizei(512),
 							   Surface8u( loadImage( loadResource( RES_CUBE1_ID ) ) ),
 							   Surface8u( loadImage( loadResource( RES_CUBE2_ID ) ) ),
