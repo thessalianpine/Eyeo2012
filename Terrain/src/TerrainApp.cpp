@@ -110,12 +110,12 @@ void TerrainApp::setup()
 
 	// LOAD SHADERS
 	try {
-		mRoomShader		= gl::GlslProg( loadResource( "room.vert" ), loadResource( "room.frag" ) );
-		mRdShader		= gl::GlslProg( loadResource( "passThru.vert" ), loadResource( "rd.frag" ) );
-		mHeightsShader	= gl::GlslProg( loadResource( "passThru.vert" ), loadResource( "heights.frag" ) );
-		mNormalsShader	= gl::GlslProg( loadResource( "passThru.vert" ), loadResource( "normals.frag" ) );
-		mTerrainShader	= gl::GlslProg( loadResource( "terrain.vert" ), loadResource( "terrain.frag" ) );
-		mSphereShader	= gl::GlslProg( loadResource( "sphere.vert" ), loadResource( "sphere.frag" ) );
+		mRoomShader		= gl::GlslProg( loadResource( RES_ROOM_VERT ), loadResource( RES_ROOM_FRAG ) );
+		mRdShader		= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( "rd.frag" ) );
+		mHeightsShader	= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( "heights.frag" ) );
+		mNormalsShader	= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( "normals.frag" ) );
+		mTerrainShader	= gl::GlslProg( loadResource( RES_TERRAIN_VERT ), loadResource( "terrain.frag" ) );
+		mSphereShader	= gl::GlslProg( loadResource( RES_SPHERE_VERT ), loadResource( "sphere.frag" ) );
 	} catch( gl::GlslProgCompileExc e ) {
 		std::cout << e.what() << std::endl;
 		quit();
@@ -146,12 +146,12 @@ void TerrainApp::setup()
 	bool isPowerOn		= false;
 	bool isGravityOn	= true;
 	mRoom				= Room( Vec3f( 300.0f, 200.0f, 300.0f ), isPowerOn, isGravityOn );	
-	mRoomBackWallTex	= gl::Texture( loadImage( loadResource( "roomWall0.png" ) ) );
-	mRoomLeftWallTex	= gl::Texture( loadImage( loadResource( "roomWall1.png" ) ) );
-	mRoomRightWallTex	= gl::Texture( loadImage( loadResource( "roomWall1.png" ) ) );
-	mRoomCeilingTex		= gl::Texture( loadImage( loadResource( "roomCeiling.png" ) ) );
-	mRoomFloorTex		= gl::Texture( loadImage( loadResource( "roomFloor.png" ) ) );
-	mRoomBlankTex		= gl::Texture( loadImage( loadResource( "roomBlank.png" ) ) );
+	mRoomBackWallTex	= gl::Texture( loadImage( loadResource( RES_ROOMWALL0_PNG ) ) );
+	mRoomLeftWallTex	= gl::Texture( loadImage( loadResource( RES_ROOMWALL1_PNG ) ) );
+	mRoomRightWallTex	= gl::Texture( loadImage( loadResource( RES_ROOMWALL1_PNG ) ) );
+	mRoomCeilingTex		= gl::Texture( loadImage( loadResource( RES_ROOMCEILING_PNG ) ) );
+	mRoomFloorTex		= gl::Texture( loadImage( loadResource( RES_ROOMFLOOR_PNG ) ) );
+	mRoomBlankTex		= gl::Texture( loadImage( loadResource( RES_ROOMBLANK_PNG ) ) );
 	
 	// ENVIRONMENT AND LIGHTING
 	mFogColor		= Color( 255.0f/255.0f, 255.0f/255.0f, 230.0f/255.0f );
