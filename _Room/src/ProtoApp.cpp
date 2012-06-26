@@ -170,6 +170,7 @@ void ProtoApp::keyDown( KeyEvent event )
 		case KeyEvent::KEY_DOWN:	mSpringCam.setEye( mRoom.getCornerFloorPos() );		break;
 		case KeyEvent::KEY_LEFT:	mSpringCam.setEye( mRoom.getLeftWallPos() );		break;
 		case KeyEvent::KEY_RIGHT:	mSpringCam.resetEye();								break;
+		case KeyEvent::KEY_ESCAPE:	quit();												break;
 		default: break;
 	}
 }

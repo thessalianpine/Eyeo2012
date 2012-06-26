@@ -160,14 +160,17 @@ void BigBangApp::mouseWheel( MouseEvent event )
 void BigBangApp::keyDown( KeyEvent event )
 {
 	switch( event.getChar() ){
-		case '1':	mController.preset( 1 );		break;
+		case '1':	mController.preset( 1 );		break;		
 		case '2':	mController.preset( 2 );		break;
+		
 		case ' ':	mRoom.togglePower();			
 					if( !mRoom.isPowerOn() )
 						mController.bang();
 					else
 						mController.clear();
 					break;
+		
+		case 'g':	mRoom.toggleGravity();			break;
 		default:									break;
 	}
 	
@@ -175,6 +178,7 @@ void BigBangApp::keyDown( KeyEvent event )
 		case KeyEvent::KEY_UP:		mSpringCam.setEye( mRoom.getCornerCeilingPos() );	break;
 		case KeyEvent::KEY_DOWN:	mSpringCam.setEye( mRoom.getCornerFloorPos() );		break;
 		case KeyEvent::KEY_RIGHT:	mSpringCam.resetEye();								break;
+		case KeyEvent::KEY_ESCAPE:  quit();												break;
 		default: break;
 	}
 }
