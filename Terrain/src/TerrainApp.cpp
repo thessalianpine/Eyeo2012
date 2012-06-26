@@ -100,7 +100,7 @@ class TerrainApp : public AppBasic {
 void TerrainApp::prepareSettings( Settings *settings )
 {
 	settings->setWindowSize( APP_WIDTH, APP_HEIGHT );
-	settings->setBorderless( true );
+	settings->setBorderless( false );
 }
 
 void TerrainApp::setup()
@@ -111,11 +111,11 @@ void TerrainApp::setup()
 	// LOAD SHADERS
 	try {
 		mRoomShader		= gl::GlslProg( loadResource( RES_ROOM_VERT ), loadResource( RES_ROOM_FRAG ) );
-		mRdShader		= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( "rd.frag" ) );
-		mHeightsShader	= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( "heights.frag" ) );
-		mNormalsShader	= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( "normals.frag" ) );
-		mTerrainShader	= gl::GlslProg( loadResource( RES_TERRAIN_VERT ), loadResource( "terrain.frag" ) );
-		mSphereShader	= gl::GlslProg( loadResource( RES_SPHERE_VERT ), loadResource( "sphere.frag" ) );
+		mRdShader		= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( RES_RD_FRAG ) );
+		mHeightsShader	= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( RES_HEIGHTS_FRAG ) );
+		mNormalsShader	= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( RES_NORMALS_FRAG ) );
+		mTerrainShader	= gl::GlslProg( loadResource( RES_TERRAIN_VERT ), loadResource( RES_TERRAIN_FRAG ) );
+		mSphereShader	= gl::GlslProg( loadResource( RES_SPHERE_VERT ), loadResource( RES_SPHERE_FRAG ) );
 	} catch( gl::GlslProgCompileExc e ) {
 		std::cout << e.what() << std::endl;
 		quit();
@@ -128,8 +128,8 @@ void TerrainApp::setup()
     mipFmt.setMagFilter( GL_LINEAR );
 	
 	// LOAD TEXTURES
-	mIconTex		= gl::Texture( loadImage( loadResource( "iconTerrain.png" ) ) );
-	mGlowTex		= gl::Texture( loadImage( loadResource( "glow.png" ) ) );
+	mIconTex		= gl::Texture( loadImage( loadResource( RES_ICONTERRAIN_PNG ) ) );
+	mGlowTex		= gl::Texture( loadImage( loadResource( RES_GLOW_PNG ) ) );
 	mCubeMap		= CubeMap( GLsizei(512), GLsizei(512),
 							   Surface8u( loadImage( loadResource( RES_CUBE1_ID ) ) ),
 							   Surface8u( loadImage( loadResource( RES_CUBE2_ID ) ) ),
@@ -166,8 +166,8 @@ void TerrainApp::setup()
 	mTerrain		= Terrain( VBO_SIZE, VBO_SIZE );
 	mZoomMulti		= 1.0f;
 	mZoomMultiDest	= 1.0f;
-	mGradientTex	= gl::Texture( loadImage( loadResource( "gradient.png" ) ) );
-	mSandNormalTex	= gl::Texture( loadImage( loadResource( "sandNormal.png" ) ) );
+	mGradientTex	= gl::Texture( loadImage( loadResource( RES_GRADIENT_PNG ) ) );
+	mSandNormalTex	= gl::Texture( loadImage( loadResource( RES_SANDNORMAL_PNG ) ) );
 	mSandNormalTex.setWrap( GL_REPEAT, GL_REPEAT );
 	
 	// REACTION DIFFUSION
@@ -273,6 +273,7 @@ void TerrainApp::keyDown( KeyEvent event )
 		case KeyEvent::KEY_LEFT:	mMouseRightPos = Vec2f(-128.0f,-178.0f ) + getWindowCenter();	break;
 		case KeyEvent::KEY_RIGHT:	mMouseRightPos = Vec2f(-256.0f, 122.0f ) + getWindowCenter();	break;
 		case KeyEvent::KEY_DOWN:	mMouseRightPos = Vec2f(   0.0f,   0.0f ) + getWindowCenter();	break;
+		case KeyEvent::KEY_ESCAPE:	quit();															break;
 		default: break;
 	}
 	
