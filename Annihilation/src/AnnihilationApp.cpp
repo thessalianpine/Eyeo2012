@@ -106,7 +106,7 @@ void AnnihilationApp::prepareSettings( Settings *settings )
 {
 	settings->setWindowSize( APP_WIDTH, APP_HEIGHT );
 	settings->setFrameRate( 60.0f );
-	settings->setBorderless();
+	settings->setBorderless(false);
 }
 
 void AnnihilationApp::setup()
@@ -124,14 +124,14 @@ void AnnihilationApp::setup()
 	
 	// SHADERS
 	try {
-		mRoomShader			= gl::GlslProg( loadResource( "room.vert"	),		loadResource( "room.frag" ) );
-		mParticleShader		= gl::GlslProg( loadResource( "particle.vert" ),	loadResource( "particle.frag" ) );
-		mBlurShader			= gl::GlslProg( loadResource( "passThru.vert" ),	loadResource( "blur.frag" ) );
-		mContrastShader		= gl::GlslProg( loadResource( "passThru.vert" ),	loadResource( "contrast.frag" ) );
-		mMatterShader		= gl::GlslProg( loadResource( "matter.vert" ),		loadResource( "matter.frag" ) );
-		mHairShader			= gl::GlslProg( loadResource( "hair.vert"	),		loadResource( "hair.frag" ) );
-		mAntimatterShader	= gl::GlslProg( loadResource( "antimatter.vert" ),	loadResource( "antimatter.frag" ) );
-		mNodesShader		= gl::GlslProg( loadResource( "nodes.vert" ),		loadResource( "nodes.frag" ) );
+		mRoomShader			= gl::GlslProg( loadResource( RES_ROOM_VERT	),		loadResource( RES_ROOM_FRAG ) );
+		mParticleShader		= gl::GlslProg( loadResource( RES_PARTICLE_VERT ),	loadResource( RES_PARTICLE_FRAG ) );
+		mBlurShader			= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ),	loadResource( RES_BLUR_FRAG ) );
+		mContrastShader		= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ),	loadResource( RES_CONTRAST_FRAG ) );
+		mMatterShader		= gl::GlslProg( loadResource( RES_MATTER_VERT ),	loadResource( RES_MATTER_FRAG ) );
+		mHairShader			= gl::GlslProg( loadResource( RES_HAIR_VERT	),		loadResource( RES_HAIR_FRAG ) );
+		mAntimatterShader	= gl::GlslProg( loadResource( RES_ANTIMATTER_VERT ),	loadResource( RES_ANTIMATTER_FRAG ) );
+		mNodesShader		= gl::GlslProg( loadResource( RES_NODES_VERT ),		loadResource( RES_NODES_FRAG ) );
 	} catch( gl::GlslProgCompileExc e ) {
 		std::cout << e.what() << std::endl;
 		quit();
@@ -144,13 +144,13 @@ void AnnihilationApp::setup()
     mipFmt.setMagFilter( GL_LINEAR );
 	
 	// TEXTURES
-	mIconTex		= gl::Texture( loadImage( loadResource( "iconAttraction.png" ) ), mipFmt );
-	mGlowTex		= gl::Texture( loadImage( loadResource( "glow.png" ) ) );
-	mSmokeTex		= gl::Texture( loadImage( loadResource( "smoke.png" ) ) );
-	mKernelTex		= gl::Texture( loadImage( loadResource( "kernel.png" ) ) );
-	mShadowTex		= gl::Texture( loadImage( loadResource( "shadow.png" ) ) );
-	mSpectrumTex	= gl::Texture( loadImage( loadResource( "spectrum.png" ) ) );
-	mWarningTex		= gl::Texture( loadImage( loadResource( "warning.png" ) ) );
+	mIconTex		= gl::Texture( loadImage( loadResource( RES_ICONATTRACTION_PNG ) ), mipFmt );
+	mGlowTex		= gl::Texture( loadImage( loadResource( RES_GLOW_PNG ) ) );
+	mSmokeTex		= gl::Texture( loadImage( loadResource( RES_SMOKE_PNG) ) );
+	mKernelTex		= gl::Texture( loadImage( loadResource( RES_KERNEL_PNG ) ) );
+	mShadowTex		= gl::Texture( loadImage( loadResource( RES_SHADOW_PNG ) ) );
+	mSpectrumTex	= gl::Texture( loadImage( loadResource( RES_SPECTRUM_PNG ) ) );
+	mWarningTex		= gl::Texture( loadImage( loadResource( RES_WARNING_PNG ) ) );
 	mCubeMap = CubeMap( GLsizei(512), GLsizei(512),
 					   Surface8u( loadImage( loadResource( RES_CUBE1_ID ) ) ),
 					   Surface8u( loadImage( loadResource( RES_CUBE2_ID ) ) ),
@@ -256,8 +256,14 @@ void AnnihilationApp::keyDown( KeyEvent event )
 		case '7':	mController.mDistPer = 0.4f;	break;
 		case '8':	mController.mDistPer = 0.3f;	break;
 		case '9':	mController.mDistPer = 0.2f;	break;
-		case '0':	mController.mDistPer = 0.1f;	break;
+		case '0':	mController.mDistPer = 0.1f;	break;			
 		default:	break;
+	}
+	
+	switch(event.getCode())
+	{
+		case KeyEvent::KEY_ESCAPE: quit();			break;
+		default:									break;
 	}
 }
 
