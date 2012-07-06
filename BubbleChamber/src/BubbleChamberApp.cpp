@@ -68,7 +68,7 @@ class BubbleChamberApp : public AppBasic {
 void BubbleChamberApp::prepareSettings( Settings *settings )
 {
 	settings->setWindowSize( APP_WIDTH, APP_HEIGHT );
-//	settings->setBorderless( true );
+	settings->setBorderless( false );
 }
 
 void BubbleChamberApp::setup()
@@ -78,8 +78,8 @@ void BubbleChamberApp::setup()
 
 	// LOAD SHADERS
 	try {
-		mRoomShader		= gl::GlslProg( loadResource( "room.vert" ), loadResource( "room.frag" ) );
-		mGlowCubeShader	= gl::GlslProg( loadResource( "glowCube.vert" ), loadResource( "glowCube.frag" ) );
+		mRoomShader		= gl::GlslProg( loadResource( RES_ROOM_VERT ), loadResource( RES_ROOM_FRAG ) );
+		mGlowCubeShader	= gl::GlslProg( loadResource( RES_GLOWCUBE_VERT ), loadResource( RES_GLOWCUBE_FRAG ) );
 	} catch( gl::GlslProgCompileExc e ) {
 		std::cout << e.what() << std::endl;
 		quit();
@@ -92,9 +92,9 @@ void BubbleChamberApp::setup()
     mipFmt.setMagFilter( GL_LINEAR );
 	
 	// LOAD TEXTURES
-	mSmokeTex		= gl::Texture( loadImage( loadResource( "smoke.png" ) ) );
-	mDecalTex		= gl::Texture( loadImage( loadResource( "decal.png" ) ) );
-	mIconTex		= gl::Texture( loadImage( loadResource( "iconBubbleChamber.png" ) ), mipFmt );
+	mSmokeTex		= gl::Texture( loadImage( loadResource( RES_SMOKE_PNG ) ) );
+	mDecalTex		= gl::Texture( loadImage( loadResource( RES_DECAL_PNG ) ) );
+	mIconTex		= gl::Texture( loadImage( loadResource( RES_ICONBUBBLECHAMBER_PNG ) ), mipFmt );
 	
 	// ROOM
 	gl::Fbo::Format roomFormat;
@@ -167,6 +167,7 @@ void BubbleChamberApp::keyDown( KeyEvent event )
 		case KeyEvent::KEY_UP:		mSpringCam.setEye( mRoom.getCornerCeilingPos() );	break;
 		case KeyEvent::KEY_DOWN:	mSpringCam.setEye( mRoom.getCornerFloorPos() );		break;
 		case KeyEvent::KEY_RIGHT:	mSpringCam.resetEye();								break;
+		case KeyEvent::KEY_ESCAPE:	quit();												break;
 		default: break;
 	}
 }
@@ -287,7 +288,7 @@ void BubbleChamberApp::draw()
 	mGlowCubeShader.unbind();
 
 	if( mSaveFrames ){
-		writeImage( getHomeDirectory() + "BubbleChamber/" + toString( mNumSaveFrames ) + ".png", copyWindowSurface() );
+		writeImage( *getHomeDirectory().c_str() + "BubbleChamber/" + toString( mNumSaveFrames ) + ".png", copyWindowSurface() );
 		mNumSaveFrames ++;
 	}
 }
