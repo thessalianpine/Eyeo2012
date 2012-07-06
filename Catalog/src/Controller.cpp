@@ -71,7 +71,8 @@ void Controller::addGlows( const Star &star, int amt )
 		float color		= 1.0f - star.mColor;
 		float lifespan	= Rand::randFloat( 25.0f, 45.0f );
 		
-		mGlows.push_back( Glow( pos, vel, radius, color, lifespan ) );
+		//mGlows.push_back( Glow( pos, vel, radius, color, lifespan ) );
+		mGlows.push_back( Glow( pos, vel, radius, lifespan ) ); //thessalianpine: changed to 4 parameter version from Star/ project since local definition is missing
 	}
 }
 

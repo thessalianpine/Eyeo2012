@@ -138,7 +138,7 @@ class CatalogApp : public AppBasic {
 void CatalogApp::prepareSettings( Settings *settings )
 {
 	settings->setWindowSize( APP_WIDTH, APP_HEIGHT );
-	settings->setBorderless( true );
+	settings->setBorderless( false );
 }
 
 void CatalogApp::setup()
@@ -148,9 +148,9 @@ void CatalogApp::setup()
 
 	// LOAD SHADERS
 	try {
-		mBrightStarsShader	= gl::GlslProg( loadResource( "brightStars.vert" ), loadResource( "brightStars.frag" ) );
-		mFaintStarsShader	= gl::GlslProg( loadResource( "faintStars.vert" ), loadResource( "faintStars.frag" ) );
-		mRoomShader			= gl::GlslProg( loadResource( "room.vert" ), loadResource( "room.frag" ) );
+		mBrightStarsShader	= gl::GlslProg( loadResource( RES_BRIGHTSTARS_VERT ), loadResource( RES_BRIGHTSTARS_FRAG ) );
+		mFaintStarsShader	= gl::GlslProg( loadResource( RES_FAINTSTARS_VERT ), loadResource( RES_FAINTSTARS_FRAG ) );
+		mRoomShader			= gl::GlslProg( loadResource( RES_ROOM_VERT ), loadResource( RES_ROOM_FRAG ) );
 	} catch( gl::GlslProgCompileExc e ) {
 		std::cout << e.what() << std::endl;
 		quit();
@@ -163,12 +163,12 @@ void CatalogApp::setup()
     mipFmt.setMagFilter( GL_LINEAR );
 	
 	// LOAD TEXTURES
-	mIconTex		= gl::Texture( loadImage( loadResource( "iconCatalog.png" ) ), mipFmt );
-	mMilkyWayTex	= gl::Texture( loadImage( loadResource( "milkyWay.jpg" ) ) );
-	mStarTex		= gl::Texture( loadImage( loadResource( "star.png" ) ), mipFmt );
-	mStarGlowTex	= gl::Texture( loadImage( loadResource( "starGlow.png" ) ), mipFmt );
-	mDarkStarTex	= gl::Texture( loadImage( loadResource( "darkStar.png" ) ) );
-	mSpectrumTex	= gl::Texture( loadImage( loadResource( "spectrum.png" ) ) );
+	mIconTex		= gl::Texture( loadImage( loadResource( RES_ICONCATALOG_PNG ) ), mipFmt );
+	mMilkyWayTex	= gl::Texture( loadImage( loadResource( RES_MILKYWAY_JPG ) ) ); //orignal filename: ESO_-_Milky_Way.jpg  Credit: European Southern Observatory - ESO/S. Brunier
+	mStarTex		= gl::Texture( loadImage( loadResource( RES_STAR_PNG ) ), mipFmt );
+	mStarGlowTex	= gl::Texture( loadImage( loadResource( RES_STARGLOW_PNG ) ), mipFmt );
+	mDarkStarTex	= gl::Texture( loadImage( loadResource( RES_DARKSTAR_PNG ) ) );
+	mSpectrumTex	= gl::Texture( loadImage( loadResource( RES_SPECTRUM_PNG ) ) );
 	
 	// FONTS
 	mFontBlackT		= Font( "Arial", 8 );
@@ -210,8 +210,8 @@ void CatalogApp::setup()
 	mScaleDest	= 0.2f;
 	mScale		= 0.2f;
 	mMaxScale	= 400.0f;
-	mScalePer	= mScale/mMaxScale;
-	parseData( getResourcePath( "starData.txt" ) );
+	mScalePer	= mScale/mMaxScale;	
+	parseData( fs::current_path() /= "..\\resources\\starData.txt" );
 	mTotalTouringStars = mTouringStars.size();
 	mHomeStar	= NULL;
 	mDestStar	= NULL;
@@ -400,6 +400,12 @@ void CatalogApp::keyDown( KeyEvent event )
 		case '2':	setView( 0, 2 );				break;
 		case '3':	setView( 0, 3 );				break;
 		case '4':	setView( 3, 0 );				break;
+		default:									break;
+	}
+
+	switch (event.getCode() )
+	{
+		case KeyEvent::KEY_ESCAPE: quit();			break;
 		default:									break;
 	}
 }
@@ -626,7 +632,7 @@ void CatalogApp::draw()
 		gl::setMatricesWindow( getWindowSize(), true );
 		
 		BOOST_FOREACH( Star* &s, mNamedStars ){
-			s->drawName( mMousePos, power * mScalePer, math<float>::max( sqrt( mScalePer ) - 0.1f, 0.0f ) );
+			s->drawName( mMousePos, power * mScalePer, cinder::math<float>::max( sqrt( mScalePer ) - 0.1f, 0.0f ) );
 		}
 	}
 	
