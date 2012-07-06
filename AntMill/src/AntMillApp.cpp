@@ -90,7 +90,7 @@ class AntMillApp : public AppBasic {
 void AntMillApp::prepareSettings( Settings *settings )
 {
 	settings->setWindowSize( APP_WIDTH, APP_HEIGHT );
-//	settings->setBorderless();
+	settings->setBorderless(false);
 }
 
 void AntMillApp::setup()
@@ -117,9 +117,9 @@ void AntMillApp::setup()
 	
 	// LOAD SHADERS
 	try {
-		mRoomShader		= gl::GlslProg( loadResource( "room.vert" ), loadResource( "room.frag" ) );
-		mBlurShader		= gl::GlslProg( loadResource( "passThru.vert" ), loadResource( "blur.frag" ) );
-		mPheromoneShader= gl::GlslProg( loadResource( "passThru.vert" ), loadResource( "pheromone.frag" ) );
+		mRoomShader		= gl::GlslProg( loadResource( RES_ROOM_VERT ), loadResource( RES_ROOM_FRAG ) );
+		mBlurShader		= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( RES_BLUR_FRAG ) );
+		mPheromoneShader= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( RES_PHEROMONE_FRAG ) );
 	} catch( gl::GlslProgCompileExc e ) {
 		std::cout << e.what() << std::endl;
 		quit();
@@ -132,10 +132,10 @@ void AntMillApp::setup()
     mipFmt.setMagFilter( GL_LINEAR );
 	
 	// LOAD TEXTURES
-	mPinTex			= gl::Texture( loadImage( loadResource( "pin.png" ) ), mipFmt );
-	mKernelTex		= gl::Texture( loadImage( loadResource( "kernel.png" ) ) );
-	mHomeTex		= gl::Texture( loadImage( loadResource( "home.png" ) ) );
-	mIconTex		= gl::Texture( loadImage( loadResource( "iconAntMill.png" ) ), mipFmt );
+	mPinTex			= gl::Texture( loadImage( loadResource( RES_PIN_PNG ) ), mipFmt );
+	mKernelTex		= gl::Texture( loadImage( loadResource( RES_KERNEL_PNG ) ) );
+	mHomeTex		= gl::Texture( loadImage( loadResource( RES_HOME_PNG ) ) );
+	mIconTex		= gl::Texture( loadImage( loadResource( RES_ICONANTMILL_PNG ) ), mipFmt );
 	
 	// ROOM
 	gl::Fbo::Format roomFormat;
@@ -205,7 +205,8 @@ void AntMillApp::keyDown( KeyEvent event )
 		case KeyEvent::KEY_UP:		mSpringCam.setEye( mRoom.getCornerCeilingPos() );	break;
 		case KeyEvent::KEY_DOWN:	mSpringCam.setEye( mRoom.getCornerFloorPos() );		break;
 		case KeyEvent::KEY_RIGHT:	mSpringCam.resetEye();								break;
-		default: break;
+		case KeyEvent::KEY_ESCAPE:  quit();												break;
+		default:																		break;
 	}
 }
 
@@ -485,7 +486,7 @@ void AntMillApp::draw()
 	}
 	
 	if( mSaveFrames ){
-		writeImage( getHomeDirectory() + "AntMill/" + toString( mNumSavedFrames ) + ".png", copyWindowSurface() );
+		writeImage( *getHomeDirectory().c_str() + "AntMill/" + toString( mNumSavedFrames ) + ".png", copyWindowSurface() );
 		mNumSavedFrames ++;
 	}
 }
