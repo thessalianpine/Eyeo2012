@@ -123,7 +123,7 @@ public:
 void FlockingApp::prepareSettings( Settings *settings )
 {
 	settings->setWindowSize( APP_WIDTH, APP_HEIGHT );
-//	settings->setBorderless();
+	settings->setBorderless( false );
 }
 
 void FlockingApp::setup()
@@ -151,7 +151,17 @@ void FlockingApp::setup()
 	mLanternGlowTex		= gl::Texture( loadImage( loadResource( RES_LANTERNGLOW_PNG ) ) );
 	mGlowTex			= gl::Texture( loadImage( loadResource( RES_GLOW_PNG ) ) );
 	mNebulaTex			= gl::Texture( loadImage( loadResource( RES_NEBULA_PNG ) ) );
-	mIconTex			= gl::Texture( loadImage( loadResource( "iconFlocking.png" ) ), mipFmt );
+
+	try
+	{
+		mIconTex			= gl::Texture( loadImage( loadResource( RES_ICONFLOCKING_PNG ) ), mipFmt );
+	}
+	catch (cinder::app::ResourceLoadExc e)
+	{
+		std::cout << e.mMessage;
+	}	
+
+	
 	
 	// LOAD SHADERS
 	try {
@@ -658,6 +668,9 @@ void FlockingApp::keyDown( KeyEvent event )
 	} else if( event.getChar() == 'l' ){
 		mController.addLantern( mRoom.getRandCeilingPos() );
 	}
+
+	if(event.getCode() == KeyEvent::KEY_ESCAPE)
+		quit();
 }
 
 void FlockingApp::update()
