@@ -151,17 +151,7 @@ void FlockingApp::setup()
 	mLanternGlowTex		= gl::Texture( loadImage( loadResource( RES_LANTERNGLOW_PNG ) ) );
 	mGlowTex			= gl::Texture( loadImage( loadResource( RES_GLOW_PNG ) ) );
 	mNebulaTex			= gl::Texture( loadImage( loadResource( RES_NEBULA_PNG ) ) );
-
-	try
-	{
-		mIconTex			= gl::Texture( loadImage( loadResource( RES_ICONFLOCKING_PNG ) ), mipFmt );
-	}
-	catch (cinder::app::ResourceLoadExc e)
-	{
-		std::cout << e.mMessage;
-	}	
-
-	
+	mIconTex			= gl::Texture( loadImage( loadResource( RES_ICONFLOCKING_PNG ) ), mipFmt );
 	
 	// LOAD SHADERS
 	try {
