@@ -59,7 +59,9 @@ def generateResName(filename):
     if filename == None or filename[0] == '.':
         return None
     items = string.split(filename, '.')
-    res = "RES_" + items[0].upper() + '_' + items[1].upper()    
+    res = "RES"
+    for part in items:
+        res += ('_' + part.upper())       
     return res
 
 def getResType(suffix):
@@ -73,10 +75,14 @@ def getResType(suffix):
 def generateCinderResMacro(rcName, numID):
     macro = "#define " + rcName + "\t\t\t\t" + "CINDER_RESOURCE( ../resources/, "
     items = string.split(rcName, '_')
-    filename = items[1].lower() + '.' + items[2].lower()
+    filename = ''
+    for i in xrange(1, len(items)):
+        filename += items[i].lower()
+        if i == len(items) - 2:
+            filename += '.'    
     macro += filename + ', '
     macro += str(numID) + ', '
-    macro += getResType(items[2]) + ' )'
+    macro += getResType( items[len(items)-1 ]) + ' )'
     return macro
 
 def updateResources():

@@ -78,7 +78,7 @@ class ForcesApp : public AppBasic {
 void ForcesApp::prepareSettings( Settings *settings )
 {
 	settings->setWindowSize( APP_WIDTH, APP_HEIGHT );
-	settings->setBorderless();
+	settings->setBorderless( false );
 }
 
 void ForcesApp::setup()
@@ -96,9 +96,9 @@ void ForcesApp::setup()
 	
 	// LOAD SHADERS
 	try {
-		mRoomShader		= gl::GlslProg( loadResource( "room.vert" ), loadResource( "room.frag" ) );
-		mShardShader	= gl::GlslProg( loadResource( "shard.vert" ), loadResource( "shard.frag" ) );
-		mFieldShader	= gl::GlslProg( loadResource( "passThru.vert" ), loadResource( "field.frag" ) );
+		mRoomShader		= gl::GlslProg( loadResource( RES_ROOM_VERT ), loadResource( RES_ROOM_FRAG ) );
+		mShardShader	= gl::GlslProg( loadResource( RES_SHARD_VERT ), loadResource( RES_SHARD_FRAG ) );
+		mFieldShader	= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( RES_FIELD_FRAG ) );
 	} catch( gl::GlslProgCompileExc e ) {
 		std::cout << e.what() << std::endl;
 		quit();
@@ -111,10 +111,10 @@ void ForcesApp::setup()
     mipFmt.setMagFilter( GL_LINEAR );
 	
 	// LOAD TEXTURES
-	mGlowTex		= gl::Texture( loadImage( loadResource( "glow.png" ) ), mipFmt );
-	mNebulaTex		= gl::Texture( loadImage( loadResource( "nebula.png" ) ), mipFmt );
-	mCoronaTex		= gl::Texture( loadImage( loadResource( "corona.png" ) ), mipFmt );
-	mIconTex		= gl::Texture( loadImage( loadResource( "iconForces.png" ) ), mipFmt );
+	mGlowTex		= gl::Texture( loadImage( loadResource( RES_GLOW_PNG ) ), mipFmt );
+	mNebulaTex		= gl::Texture( loadImage( loadResource( RES_NEBULA_PNG ) ), mipFmt );
+	mCoronaTex		= gl::Texture( loadImage( loadResource( RES_CORONA_PNG ) ), mipFmt );
+	mIconTex		= gl::Texture( loadImage( loadResource( RES_ICONFORCES_PNG ) ), mipFmt );
 	mCubeMap		= CubeMap( GLsizei(512), GLsizei(512),
 							   Surface8u( loadImage( loadResource( RES_CUBE1_ID ) ) ),
 							   Surface8u( loadImage( loadResource( RES_CUBE2_ID ) ) ),
@@ -197,6 +197,7 @@ void ForcesApp::keyDown( KeyEvent event )
 		case KeyEvent::KEY_DOWN:	mSpringCam.setEye( mRoom.getCornerFloorPos() );		break;
 		case KeyEvent::KEY_RIGHT:	mSpringCam.resetEye();								break;
 		case KeyEvent::KEY_LEFT:	mSpringCam.setEye( mRoom.getRightWallPos() );		break;
+		case KeyEvent::KEY_ESCAPE:	quit();												break;
 		default: break;
 	}
 }
@@ -336,7 +337,7 @@ void ForcesApp::draw()
 	gl::disableDepthRead();
 	
 	if( mSaveFrames ){
-		writeImage( getHomeDirectory() + "Forces/" + toString( mNumSavedFrames ) + ".png", copyWindowSurface() );
+		writeImage( *getHomeDirectory().c_str() + "Forces/" + toString( mNumSavedFrames ) + ".png", copyWindowSurface() );
 		mNumSavedFrames ++;
 	}
 	
