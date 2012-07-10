@@ -103,7 +103,7 @@ class MatterApp : public AppBasic {
 void MatterApp::prepareSettings( Settings *settings )
 {
 	settings->setWindowSize( APP_WIDTH, APP_HEIGHT );
-//	settings->setBorderless( true );
+	settings->setBorderless( false );
 }
 
 void MatterApp::setup()
@@ -130,16 +130,16 @@ void MatterApp::setup()
 					   );
 	
 	// TEXTURES
-	mGlowsTex		= gl::Texture( loadImage( loadResource( "glow.png" ) ) );
-	mSmokeTex		= gl::Texture( loadImage( loadResource( "smoke.png" ) ) );
-	mShadowTex		= gl::Texture( loadImage( loadResource( "shadow.png" ) ) );
-	mWarningTex		= gl::Texture( loadImage( loadResource( "warning.png" ) ) );
-	mIconTex		= gl::Texture( loadImage( loadResource( "iconMatter.png" ) ) );
+	mGlowsTex		= gl::Texture( loadImage( loadResource( RES_GLOW_PNG ) ) );
+	mSmokeTex		= gl::Texture( loadImage( loadResource( RES_SMOKE_PNG ) ) );
+	mShadowTex		= gl::Texture( loadImage( loadResource( RES_SHADOW_PNG ) ) );
+	mWarningTex		= gl::Texture( loadImage( loadResource( RES_WARNING_PNG ) ) );
+	mIconTex		= gl::Texture( loadImage( loadResource( RES_ICONMATTER_PNG ) ) );
 	
 	// SHADERS
 	try {
-		mRoomShader			= gl::GlslProg( loadResource( "room.vert"	),		loadResource( "room.frag" ) );
-		mParticleShader		= gl::GlslProg( loadResource( "particle.vert" ),	loadResource( "particle.frag" ) );	
+		mRoomShader			= gl::GlslProg( loadResource( RES_ROOM_VERT	),		loadResource( RES_ROOM_FRAG ) );
+		mParticleShader		= gl::GlslProg( loadResource( RES_PARTICLE_VERT ),	loadResource( RES_PARTICLE_FRAG ) );	
 	} catch( gl::GlslProgCompileExc e ) {
 		std::cout << e.what() << std::endl;
 		quit();
@@ -268,6 +268,12 @@ void MatterApp::keyDown( KeyEvent event )
 		case '8' : mController.preset( 8 );			break;
 		case '9' : mController.preset( 9 );			break;
 		case '0' : mController.preset( 10 );		break;
+		default:									break;
+	}
+
+	switch(event.getCode())
+	{
+		case KeyEvent::KEY_ESCAPE: quit();			break;
 		default:									break;
 	}
 }
@@ -459,7 +465,7 @@ void MatterApp::draw()
 	}
 //	params::InterfaceGl::draw();
 	
-//	writeImage( getHomeDirectory() + "Matter/" + toString( getElapsedFrames() ) + ".png", copyWindowSurface() );
+//	writeImage( *getHomeDirectory().c_str() + "Matter/" + toString( getElapsedFrames() ) + ".png", copyWindowSurface() );
 }
 
 void MatterApp::drawWarning()
