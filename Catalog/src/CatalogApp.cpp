@@ -59,15 +59,17 @@ class CatalogApp : public AppBasic {
 	virtual void	mouseWheel( MouseEvent event );
 	virtual void	keyDown( KeyEvent event );
 	void			setFboPositions( gl::Fbo &fbo );
-	void		parseData( const fs::path &path );
-	Vec3f		convertToCartesian( double ra, double dec, double dist );
-	void		createStar( const std::string &text, int lineNumber );
+	void			parseData( const fs::path &path );
+	Vec3f			convertToCartesian( double ra, double dec, double dist );
+	void			createStar( const std::string &text, int lineNumber );
 	void			setView( int homeIndex, int destIndex );
 	virtual void	update();
 	void			selectStar( bool wasRightClick );
 	void			drawIntoRoomFbo();
 	virtual void	draw();
 	void			drawInfoPanel();
+	void			drawCopyrightNotice(float alpha);
+
 	
 	// CAMERA
 	SpringCam			mSpringCam;
@@ -121,6 +123,7 @@ class CatalogApp : public AppBasic {
 	
 	float				mScale, mScaleDest;
 	float				mScalePer, mMaxScale;
+	float				mCopyrightAlpha;
 	
 	int					mTotalTouringStars;
 	int					mTouringStarIndex;
@@ -168,7 +171,7 @@ void CatalogApp::setup()
 	mStarTex		= gl::Texture( loadImage( loadResource( RES_STAR_PNG ) ), mipFmt );
 	mStarGlowTex	= gl::Texture( loadImage( loadResource( RES_STARGLOW_PNG ) ), mipFmt );
 	mDarkStarTex	= gl::Texture( loadImage( loadResource( RES_DARKSTAR_PNG ) ) );
-	mSpectrumTex	= gl::Texture( loadImage( loadResource( RES_SPECTRUM_PNG ) ) );
+	mSpectrumTex	= gl::Texture( loadImage( loadResource( RES_SPECTRUM_PNG ) ) );	
 	
 	// FONTS
 	mFontBlackT		= Font( "Arial", 8 );
@@ -224,6 +227,7 @@ void CatalogApp::setup()
 	initBrightVbo();
 	
 	mDataTimer	= 0.0f;
+	mCopyrightAlpha = 1.0f;
 	
 	// RENDER OPTIONS
 	mRenderNames			= true;
@@ -392,7 +396,11 @@ void CatalogApp::mouseWheel( MouseEvent event )
 void CatalogApp::keyDown( KeyEvent event )
 {
 	switch( event.getChar() ){
-		case ' ':	mRoom.togglePower();			break;
+		case ' ':	
+			mRoom.togglePower();
+			if(!mRoom.isPowerOn() && mCopyrightAlpha < 1.0f)
+				mCopyrightAlpha = 1.0f;
+			break;
 		case 'n':	mRenderNames = !mRenderNames;	break;
 		case 'b':	mRenderBrightStars = !mRenderBrightStars;	break;
 		case 'f':	mRenderFaintStars = !mRenderFaintStars;		break;
@@ -541,8 +549,7 @@ void CatalogApp::draw()
 	// DRAW PANEL
 	if( power < 0.1f )
 		drawInfoPanel();
-	
-
+		
 	gl::enable( GL_TEXTURE_2D );
 	
 	gl::pushMatrices();
@@ -630,7 +637,14 @@ void CatalogApp::draw()
 			gl::enableAdditiveBlending();
 		}
 		gl::setMatricesWindow( getWindowSize(), true );
-		
+
+		//draw copyright notice
+		if(mRoom.isPowerOn() && mCopyrightAlpha > 0.0f)
+		{
+			drawCopyrightNotice(mCopyrightAlpha);
+			mCopyrightAlpha -= 0.002f;
+		}
+
 		BOOST_FOREACH( Star* &s, mNamedStars ){
 			s->drawName( mMousePos, power * mScalePer, cinder::math<float>::max( sqrt( mScalePer ) - 0.1f, 0.0f ) );
 		}
@@ -675,6 +689,19 @@ void CatalogApp::drawInfoPanel()
 	
 	
 	gl::popMatrices();
+}
+
+void CatalogApp::drawCopyrightNotice(float alpha)
+{
+	TextLayout layout;
+	layout.clear(Color( 0.0f, 0.0f, 0.0f));
+	layout.setColor(ColorA(1.0f, 1.0f, 1.0f, alpha));
+	layout.setFont(Font( "Arial", 18));	
+	layout.addLine("Milky Way Backdrop (c) ESO/S. Brunier\nsee Readme.txt");
+	Surface textSurface = layout.render(true, true);
+	gl::Texture tex(textSurface);
+	tex.enableAndBind();
+	gl::draw(tex, Vec2f(-3.0f, -3.0f));
 }
 
 void CatalogApp::parseData( const fs::path &path )
@@ -796,7 +823,5 @@ Vec3f CatalogApp::convertToCartesian( double ra, double dec, double dist )
 	
 	return pos;
 }
-
-
 
 CINDER_APP_BASIC( CatalogApp, RendererGl )
