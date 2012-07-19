@@ -86,7 +86,7 @@ class ShockwavesApp : public AppBasic {
 void ShockwavesApp::prepareSettings( Settings *settings )
 {
 	settings->setWindowSize( APP_WIDTH, APP_HEIGHT );
-	settings->setBorderless();
+	settings->setBorderless(false);
 }
 
 void ShockwavesApp::setup()
@@ -102,9 +102,9 @@ void ShockwavesApp::setup()
 	
 	// LOAD SHADERS
 	try {
-		mRoomShader		 = gl::GlslProg( loadResource( "room.vert" ), loadResource( "room.frag" ) );
-		mShockwaveShader = gl::GlslProg( loadResource( "shockwave.vert" ), loadResource( "shockwave.frag" ) );
-		mNodeShader		 = gl::GlslProg( loadResource( "node.vert" ), loadResource( "node.frag" ) );
+		mRoomShader		 = gl::GlslProg( loadResource( RES_ROOM_VERT ), loadResource( RES_ROOM_FRAG ) );
+		mShockwaveShader = gl::GlslProg( loadResource( RES_SHOCKWAVE_VERT ), loadResource( RES_SHOCKWAVE_FRAG ) );
+		mNodeShader		 = gl::GlslProg( loadResource( RES_NODE_VERT ), loadResource( RES_NODE_FRAG ) );
 	} catch( gl::GlslProgCompileExc e ) {
 		std::cout << e.what() << std::endl;
 		quit();
@@ -117,9 +117,9 @@ void ShockwavesApp::setup()
     mipFmt.setMagFilter( GL_LINEAR );
 	
 	// LOAD TEXTURES
-	mIconTex		= gl::Texture( loadImage( loadResource( "iconShockwaves.png" ) ), mipFmt );
-	mSmokeTex		= gl::Texture( loadImage( loadResource( "smoke.png" ) ), mipFmt );
-	mGlowTex		= gl::Texture( loadImage( loadResource( "glow.png" ) ), mipFmt );
+	mIconTex		= gl::Texture( loadImage( loadResource( RES_ICONSHOCKWAVES_PNG ) ), mipFmt );
+	mSmokeTex		= gl::Texture( loadImage( loadResource( RES_SMOKE_PNG ) ), mipFmt );
+	mGlowTex		= gl::Texture( loadImage( loadResource( RES_GLOW_PNG ) ), mipFmt );
 	mCubeMap		= CubeMap( GLsizei(512), GLsizei(512),
 							   Surface8u( loadImage( loadResource( RES_CUBE1_ID ) ) ),
 							   Surface8u( loadImage( loadResource( RES_CUBE2_ID ) ) ),
@@ -309,6 +309,7 @@ void ShockwavesApp::keyDown( KeyEvent event )
 		case KeyEvent::KEY_UP:		mSpringCam.setEye( mRoom.getCornerCeilingPos() );	break;
 		case KeyEvent::KEY_DOWN:	mSpringCam.setEye( mRoom.getCornerFloorPos() );		break;
 		case KeyEvent::KEY_RIGHT:	mSpringCam.resetEye();								break;
+		case KeyEvent::KEY_ESCAPE:	quit();												break;
 		default: break;
 	}
 }
