@@ -227,7 +227,7 @@ void CatalogApp::setup()
 	initBrightVbo();
 	
 	mDataTimer	= 0.0f;
-	mCopyrightAlpha = 1.0f;
+	mCopyrightAlpha = 0.0f;
 	
 	// RENDER OPTIONS
 	mRenderNames			= true;
@@ -398,8 +398,8 @@ void CatalogApp::keyDown( KeyEvent event )
 	switch( event.getChar() ){
 		case ' ':	
 			mRoom.togglePower();
-			if(!mRoom.isPowerOn() && mCopyrightAlpha < 1.0f)
-				mCopyrightAlpha = 1.0f;
+			if(mRoom.isPowerOn() && mCopyrightAlpha < 1.0f)
+ 				mCopyrightAlpha = 1.0f;
 			break;
 		case 'n':	mRenderNames = !mRenderNames;	break;
 		case 'b':	mRenderBrightStars = !mRenderBrightStars;	break;
@@ -639,7 +639,7 @@ void CatalogApp::draw()
 		gl::setMatricesWindow( getWindowSize(), true );
 
 		//draw copyright notice
-		if(mRoom.isPowerOn() && mCopyrightAlpha > 0.0f)
+		if(mRoom.mIsPowerOn && mCopyrightAlpha > 0.0f)
 		{
 			drawCopyrightNotice(mCopyrightAlpha);
 			mCopyrightAlpha -= 0.002f;
@@ -694,14 +694,14 @@ void CatalogApp::drawInfoPanel()
 void CatalogApp::drawCopyrightNotice(float alpha)
 {
 	TextLayout layout;
-	layout.clear(Color( 0.0f, 0.0f, 0.0f));
+	layout.clear(ColorA( 0.0f, 0.0f, 0.0f, 0.0f));
 	layout.setColor(ColorA(1.0f, 1.0f, 1.0f, alpha));
-	layout.setFont(Font( "Arial", 18));	
-	layout.addLine("Milky Way Backdrop (c) ESO/S. Brunier\nsee Readme.txt");
+	layout.setFont(Font( "Tahoma", 20));
+	layout.addLine("Milky Way Backdrop (c) ESO/S. Brunier\nsee resources/copyright.txt");
 	Surface textSurface = layout.render(true, true);
 	gl::Texture tex(textSurface);
 	tex.enableAndBind();
-	gl::draw(tex, Vec2f(-3.0f, -3.0f));
+	gl::draw(tex);
 }
 
 void CatalogApp::parseData( const fs::path &path )
