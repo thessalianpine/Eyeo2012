@@ -34,7 +34,7 @@ void Controller::init( Room *room, int gridDim )
 void Controller::createNodes( int gridDim )
 {
 	int dim		= gridDim;
-	int halfDim = floor( gridDim/2 );
+	int halfDim = floor( (float)gridDim/2 );
 	float spacing	= 10.0f;
 	
 	for( int z=0; z<dim; z++ ){

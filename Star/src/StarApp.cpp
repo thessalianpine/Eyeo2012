@@ -139,7 +139,7 @@ class StarApp : public AppBasic {
 void StarApp::prepareSettings( Settings *settings )
 {
 	settings->setWindowSize( APP_WIDTH, APP_HEIGHT );
-	settings->setBorderless( true );
+	settings->setBorderless( false );
 }
 
 void StarApp::setup()
@@ -155,29 +155,29 @@ void StarApp::setup()
 	
 	// LOAD SHADERS
 	try {
-		mGradientShader = gl::GlslProg( loadResource( "passThru.vert" ), loadResource( "gradient.frag" ) );
-		mRoomShader		= gl::GlslProg( loadResource( "room.vert" ), loadResource( "room.frag" ) );
-		mStarShader		= gl::GlslProg( loadResource( "star.vert" ), loadResource( "star.frag" ) );
-		mGlowShader		= gl::GlslProg( loadResource( "passThru.vert" ), loadResource( "glow.frag" ) );
-		mNebulaShader	= gl::GlslProg( loadResource( "passThru.vert" ), loadResource( "nebula.frag" ) );
-		mCoronaShader	= gl::GlslProg( loadResource( "passThru.vert" ), loadResource( "corona.frag" ) );
-		mDustShader		= gl::GlslProg( loadResource( "passThruColor.vert" ), loadResource( "dust.frag" ) );
-		mPlanetShader	= gl::GlslProg( loadResource( "passThruNormals.vert" ), loadResource( "planet.frag" ) );
+		mGradientShader = gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( RES_GRADIENT_FRAG ) );
+		mRoomShader		= gl::GlslProg( loadResource( RES_ROOM_VERT ), loadResource( RES_ROOM_FRAG ) );
+		mStarShader		= gl::GlslProg( loadResource( RES_STAR_VERT ), loadResource( RES_STAR_FRAG ) );
+		mGlowShader		= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( RES_GLOW_FRAG ) );
+		mNebulaShader	= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( RES_NEBULA_FRAG ) );
+		mCoronaShader	= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( RES_CORONA_FRAG ) );
+		mDustShader		= gl::GlslProg( loadResource( RES_PASSTHRUCOLOR_VERT ), loadResource( RES_DUST_FRAG ) );
+		mPlanetShader	= gl::GlslProg( loadResource( RES_PASSTHRUNORMALS_VERT ), loadResource( RES_PLANET_FRAG ) );
 	} catch( gl::GlslProgCompileExc e ) {
 		std::cout << e.what() << std::endl;
 		quit();
 	}
 	
 	// LOAD TEXTURES
-	mSpectrumTex		= gl::Texture( loadImage( loadResource( "spectrum.png" ) ) );
-	mGlowTex			= gl::Texture( loadImage( loadResource( "glow.png" ) ) );
-	mNebulaTex			= gl::Texture( loadImage( loadResource( "nebula.png" ) ) );
-	mCoronaTex			= gl::Texture( loadImage( loadResource( "corona.png" ) ) );
-	mGridTex			= gl::Texture( loadImage( loadResource( "grid.png" ) ) );
-	mSmallGridTex		= gl::Texture( loadImage( loadResource( "smallGrid.png" ) ) );
-	mBigGlow0Tex		= gl::Texture( loadImage( loadResource( "bigGlow0.png" ) ) );
-	mBigGlow1Tex		= gl::Texture( loadImage( loadResource( "bigGlow1.png" ) ) );
-	mIconTex			= gl::Texture( loadImage( loadResource( "iconStar.png" ) ) );
+	mSpectrumTex		= gl::Texture( loadImage( loadResource( RES_SPECTRUM_PNG ) ) );
+	mGlowTex			= gl::Texture( loadImage( loadResource( RES_GLOW_PNG ) ) );
+	mNebulaTex			= gl::Texture( loadImage( loadResource( RES_NEBULA_PNG ) ) );
+	mCoronaTex			= gl::Texture( loadImage( loadResource( RES_CORONA_PNG ) ) );
+	mGridTex			= gl::Texture( loadImage( loadResource( RES_GRID_PNG ) ) );
+	mSmallGridTex		= gl::Texture( loadImage( loadResource( RES_SMALLGRID_PNG ) ) );
+	mBigGlow0Tex		= gl::Texture( loadImage( loadResource( RES_BIGGLOW0_PNG ) ) );
+	mBigGlow1Tex		= gl::Texture( loadImage( loadResource( RES_BIGGLOW1_PNG ) ) );
+	mIconTex			= gl::Texture( loadImage( loadResource( RES_ICONSTAR_PNG ) ) );
 	mCubeMap			= CubeMap( GLsizei(512), GLsizei(512),
 								  Surface8u( loadImage( loadResource( RES_CUBE1_ID ) ) ),
 								  Surface8u( loadImage( loadResource( RES_CUBE2_ID ) ) ),
@@ -420,6 +420,12 @@ void StarApp::keyDown( KeyEvent event )
 		case '=':	setStar( 1 );					break;
 		case '-':	setStar( -1 );					break;
 		default:									break;
+	}
+
+	switch(event.getCode())
+	{
+		case KeyEvent::KEY_ESCAPE: quit();				break;
+		default:										break;
 	}
 }
 

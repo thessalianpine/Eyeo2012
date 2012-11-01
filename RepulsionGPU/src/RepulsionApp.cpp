@@ -11,6 +11,7 @@
 #include "cinder/Rand.h"
 #include "Room.h"
 #include "SpringCam.h"
+#include "Resources.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -92,7 +93,7 @@ class RepulsionApp : public AppBasic {
 void RepulsionApp::prepareSettings( Settings *settings )
 {
 	settings->setWindowSize( APP_WIDTH, APP_HEIGHT );
-//	settings->setBorderless();
+	settings->setBorderless(false);
 }
 
 void RepulsionApp::setup()
@@ -120,12 +121,12 @@ void RepulsionApp::setup()
 
 	// SHADERS
 	try {
-		mVelocityShader = gl::GlslProg( loadResource( "passThru.vert" ), loadResource( "Velocity.frag" ) );
-		mPositionShader	= gl::GlslProg( loadResource( "passThru.vert" ), loadResource( "Position.frag" ) );
-		mShader			= gl::GlslProg( loadResource( "VboPos.vert" ), loadResource( "VboPos.frag" ) );
-		mRoomShader		= gl::GlslProg( loadResource( "room.vert" ), loadResource( "room.frag" ) );
-		mPosInitShader	= gl::GlslProg( loadResource( "passThru.vert" ), loadResource( "fboPosInit.frag" ) );
-		mVelInitShader	= gl::GlslProg( loadResource( "passThru.vert" ), loadResource( "fboVelInit.frag" ) );
+		mVelocityShader = gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( RES_VELOCITY_FRAG ) );
+		mPositionShader	= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( RES_POSITION_FRAG ) );
+		mShader			= gl::GlslProg( loadResource( RES_VBOPOS_VERT ), loadResource( RES_VBOPOS_FRAG ) );
+		mRoomShader		= gl::GlslProg( loadResource( RES_ROOM_VERT ), loadResource( RES_ROOM_FRAG ) );
+		mPosInitShader	= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( RES_FBOPOSINIT_FRAG ) );
+		mVelInitShader	= gl::GlslProg( loadResource( RES_PASSTHRU_VERT ), loadResource( RES_FBOVELINIT_FRAG ) );
 	} catch( gl::GlslProgCompileExc e ) {
 		std::cout << e.what() << std::endl;
 		quit();
@@ -138,7 +139,7 @@ void RepulsionApp::setup()
     mipFmt.setMagFilter( GL_LINEAR );
 	
 	// LOAD TEXTURES
-	mIconTex		= gl::Texture( loadImage( loadResource( "iconRepulsion.png" ) ), mipFmt );
+	mIconTex		= gl::Texture( loadImage( loadResource( RES_ICONREPULSION_PNG ) ), mipFmt );
 
 	// ROOM
 	gl::Fbo::Format roomFormat;
@@ -333,6 +334,12 @@ void RepulsionApp::keyDown( KeyEvent event )
 		case 's':	mSaveFrames = !mSaveFrames;		break;
 		default:									break;
 	}
+
+	switch(event.getCode())
+	{
+		case KeyEvent::KEY_ESCAPE:	quit();			break;
+		default:									break;
+	}
 }
 
 void RepulsionApp::update()
@@ -475,7 +482,7 @@ void RepulsionApp::draw()
 	mShader.unbind();
 	
 	if( mSaveFrames && mNumSavedFrames < 15000 ){
-		writeImage( getHomeDirectory() + "RepulsionGPU/" + toString( mNumSavedFrames ) + ".png", copyWindowSurface() );
+		writeImage( *getHomeDirectory().c_str() + "RepulsionGPU/" + toString( mNumSavedFrames ) + ".png", copyWindowSurface() );
 		mNumSavedFrames ++;
 	}
 	

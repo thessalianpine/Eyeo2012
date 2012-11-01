@@ -54,6 +54,7 @@ class ShadedSphereApp : public AppBasic {
 void ShadedSphereApp::prepareSettings( Settings *settings )
 {
 	settings->setWindowSize( APP_WIDTH, APP_HEIGHT );
+	settings->setBorderless(false);
 }
 
 void ShadedSphereApp::setup()
@@ -63,8 +64,8 @@ void ShadedSphereApp::setup()
 	
 	// LOAD SHADERS
 	try {
-		mRoomShader		= gl::GlslProg( loadResource( "room.vert" ), loadResource( "room.frag" ) );
-		mSphereShader	= gl::GlslProg( loadResource( "sphere.vert" ), loadResource( "sphere.frag" ) );
+		mRoomShader		= gl::GlslProg( loadResource( RES_ROOM_VERT ), loadResource( RES_ROOM_FRAG ) );
+		mSphereShader	= gl::GlslProg( loadResource( RES_SPHERE_VERT ), loadResource( RES_SPHERE_FRAG ) );
 	} catch( gl::GlslProgCompileExc e ) {
 		std::cout << e.what() << std::endl;
 		quit();
