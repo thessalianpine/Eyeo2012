@@ -143,11 +143,15 @@ void Room::updateTime( bool saveFrame )
 
 void Room::update( bool saveFrame )
 {
-	if( mIsPowerOn )	mPower -= ( mPower - 1.0f ) * 0.2f;
-	else				mPower -= ( mPower - 0.0f ) * 0.2f;
+	if( mIsPowerOn )
+		mPower -= ( mPower - 1.0f ) * 0.2f;
+	else				
+		mPower -= ( mPower - 0.0f ) * 0.2f;
 	
-	if( mIsGravityOn )	mGravity -= ( mGravity - mDefaultGravity ) * 0.2f;
-	else				mGravity -= ( mGravity - Vec3f::zero() ) * 0.2f;
+	if( mIsGravityOn )	
+		mGravity -= ( mGravity - mDefaultGravity ) * 0.2f;
+	else				
+		mGravity -= ( mGravity - Vec3f::zero() ) * 0.2f;
 	
 	mDims -= ( mDims - mDimsDest ) * 0.1f;
 	

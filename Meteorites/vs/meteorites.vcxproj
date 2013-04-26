@@ -81,12 +81,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Controller.h" />
+    <ClInclude Include="..\include\Meteor.h" />
     <ClInclude Include="..\include\Resources.h" />
     <ClInclude Include="..\include\Room.h" />
     <ClInclude Include="..\include\SpringCam.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Controller.cpp" />
+    <ClCompile Include="..\src\Meteor.cpp" />
     <ClCompile Include="..\src\ProtoApp.cpp" />
     <ClCompile Include="..\src\Room.cpp" />
     <ClCompile Include="..\src\SpringCam.cpp" />

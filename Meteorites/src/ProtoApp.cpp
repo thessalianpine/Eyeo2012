@@ -103,7 +103,7 @@ void ProtoApp::setup()
 	gl::Fbo::Format roomFormat;
 	roomFormat.setColorInternalFormat( GL_RGB );
 	mRoomFbo			= gl::Fbo( APP_WIDTH/ROOM_FBO_RES, APP_HEIGHT/ROOM_FBO_RES, roomFormat );
-	bool isPowerOn		= true;
+	bool isPowerOn		= false;
 	bool isGravityOn	= true;
 	mRoom				= Room( Vec3f( 350.0f, 200.0f, 350.0f ), isPowerOn, isGravityOn );	
 	mRoom.init();
