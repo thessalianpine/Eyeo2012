@@ -13,6 +13,7 @@
 #include "Controller.h"
 #include "Room.h"
 #include "SpringCam.h"
+#include "Meteor.h"
 
 //#include "cinder/params/Params.h"
 
@@ -39,6 +40,8 @@ class ProtoApp : public AppBasic {
 	void			drawIntoRoomFbo();
 	virtual void	draw();
 	void			drawInfoPanel();
+	void			spawnMeteorites();
+
 	
 	// CAMERA
 	SpringCam		mSpringCam;
@@ -66,6 +69,9 @@ class ProtoApp : public AppBasic {
 //	// PARAMS
 //	params::InterfaceGl	mParams;
 //	bool				mShowParams;
+
+private:
+	Meteor*			mTestMeteor;
 };
 
 void ProtoApp::prepareSettings( Settings *settings )
@@ -124,6 +130,8 @@ void ProtoApp::setup()
 //	mShowParams		= false;
 //	mParams			= params::InterfaceGl( "Flocking", Vec2i( 200, 150 ) );
 //	mParams.addParam( "Time Multi", &mTimeMulti, "min=0.0 max=180.0 step=1.0 keyIncr=t keyDecr=T" );
+
+	spawnMeteorites();
 }
 
 void ProtoApp::mouseDown( MouseEvent event )
@@ -217,6 +225,7 @@ void ProtoApp::drawIntoRoomFbo()
 	mRoomShader.unbind();
 	
 	mRoomFbo.unbindFramebuffer();
+	mTestMeteor->draw();
 	glDisable( GL_CULL_FACE );
 }
 
@@ -291,6 +300,17 @@ void ProtoApp::drawInfoPanel()
 	
 	gl::popMatrices();
 }
+
+
+
+void ProtoApp::spawnMeteorites()
+{
+	//test
+	mTestMeteor = new Meteor();
+	mTestMeteor->spawn(Vec3f(0.0f, 1.0f, 0.0f));
+}
+
+
 
 
 CINDER_APP_BASIC( ProtoApp, RendererGl )

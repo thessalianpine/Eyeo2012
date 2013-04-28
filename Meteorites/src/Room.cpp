@@ -111,10 +111,10 @@ void Room::init()
 		texCoords.push_back( vTexCoords[tIndices[i][2]] );
 	}
 	
-//	std::cout << "posCoords size = " << posCoords.size() << std::endl;
-//	std::cout << "indices size = " << indices.size() << std::endl;
-//	std::cout << "normals size = " << normals.size() << std::endl;
-//	std::cout << "texCoords size = " << texCoords.size() << std::endl;	
+	std::cout << "posCoords size = " << posCoords.size() << std::endl;
+	std::cout << "indices size = " << indices.size() << std::endl;
+	std::cout << "normals size = " << normals.size() << std::endl;
+	std::cout << "texCoords size = " << texCoords.size() << std::endl;	
 
 	mVbo = gl::VboMesh( posCoords.size(), indices.size(), layout, GL_TRIANGLES );	
 	mVbo.bufferIndices( indices );

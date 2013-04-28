@@ -15,6 +15,11 @@ public:
 
 	void draw();
 	void spawn(Vec3f pos);
+	
+	inline void setPosition(Vec3f pos)
+	{
+		mPosition = pos;
+	}
 
 private:
 
